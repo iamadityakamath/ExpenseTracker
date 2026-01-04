@@ -81,6 +81,7 @@ export function AddExpensePage({ onExpenseAdded }: AddExpensePageProps) {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-foreground">$</span>
               <Input
                 type="number"
+                inputMode="numeric"
                 step="0.01"
                 min="0"
                 placeholder="0.00"
