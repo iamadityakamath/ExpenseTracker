@@ -72,10 +72,10 @@ export function AddExpensePage({ onExpenseAdded }: AddExpensePageProps) {
         <p className="text-primary-foreground/70 text-sm font-medium mt-1">Track your spending</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-y-auto">
-        <div className="flex-1 px-6 py-6 space-y-6">
+      <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+        <div className="flex-1 px-6 py-4 space-y-4">
           {/* Amount Input */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground block">Amount</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-foreground">$</span>
@@ -94,18 +94,18 @@ export function AddExpensePage({ onExpenseAdded }: AddExpensePageProps) {
           </div>
 
           {/* Category Selector */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground block">Category</label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {CATEGORIES.map((cat) => (
                 <Button
                   key={cat.name}
                   type="button"
                   variant={category === cat.name ? "default" : "outline"}
                   onClick={() => setCategory(cat.name)}
-                  className="h-12 flex items-center justify-center gap-2"
+                  className="h-11 flex items-center justify-center gap-2 text-sm"
                 >
-                  <span className="text-lg">{cat.emoji}</span>
+                  <span className="text-base">{cat.emoji}</span>
                   <span>{cat.name}</span>
                 </Button>
               ))}
@@ -113,7 +113,7 @@ export function AddExpensePage({ onExpenseAdded }: AddExpensePageProps) {
           </div>
 
           {/* Date Input */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground block">Date</label>
             <Input
               type="date"
@@ -125,7 +125,7 @@ export function AddExpensePage({ onExpenseAdded }: AddExpensePageProps) {
           </div>
 
           {/* Description Input */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground block">
               Description <span className="text-muted-foreground font-normal">(optional)</span>
             </label>
@@ -139,7 +139,7 @@ export function AddExpensePage({ onExpenseAdded }: AddExpensePageProps) {
           </div>
         </div>
 
-        <div className="px-6 py-6 bg-background safe-area-inset-bottom">
+        <div className="px-6 py-4 bg-background safe-area-inset-bottom">
           <Button
             type="submit"
             className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl transition-colors text-base"
