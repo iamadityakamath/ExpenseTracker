@@ -12,6 +12,7 @@ const CATEGORIES = [
   { name: "Rent", emoji: "💡" },
   { name: "Entertainment", emoji: "🎬" },
   { name: "Shopping", emoji: "🛒" },
+  { name: "Subscriptions", emoji: "💳" },
   { name: "Other", emoji: "📦" },
 ]
 
