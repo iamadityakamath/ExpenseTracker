@@ -4,7 +4,9 @@ import { useMemo, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Trash2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Trash2, Download } from "lucide-react"
+import * as XLSX from "xlsx"
 import type { Expense } from "@/types/expense"
 
 interface HomePageProps {
@@ -96,6 +98,51 @@ export function HomePage({ expenses, onDeleteExpense }: HomePageProps) {
     return groups
   }, [sortedExpenses])
 
+  const exportToExcel = () => {
+    // Prepare data for Excel
+    const excelData = expenses.map(expense => ({
+      Date: new Date(expense.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }),
+      Category: expense.category,
+      Amount: expense.amount,
+      Description: expense.description || "",
+      "Created At": new Date(expense.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+    }))
+
+    // Create workbook and worksheet
+    const wb = XLSX.utils.book_new()
+    const ws = XLSX.utils.json_to_sheet(excelData)
+
+    // Auto-size columns
+    const colWidths = [
+      { wch: 12 }, // Date
+      { wch: 15 }, // Category
+      { wch: 10 }, // Amount
+      { wch: 30 }, // Description
+      { wch: 18 }  // Created At
+    ]
+    ws['!cols'] = colWidths
+
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Expenses")
+
+    // Generate filename with current date
+    const currentDate = new Date().toISOString().split('T')[0]
+    const filename = `expenses_${currentDate}.xlsx`
+
+    // Save file
+    XLSX.writeFile(wb, filename)
+  }
+
   const categoryTotals = useMemo(() => {
     const totals: Record<string, number> = {}
     filteredExpenses.forEach(expense => {
@@ -118,6 +165,7 @@ export function HomePage({ expenses, onDeleteExpense }: HomePageProps) {
             <p className="text-primary-foreground/70 text-sm font-medium mb-1">Welcome back</p>
             <h1 className="text-4xl font-bold text-primary-foreground">Expense Tracker</h1>
           </div>
+        <div className="flex flex-col items-end gap-2">
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
             <SelectTrigger className="w-40 bg-white/20 border-white/30 text-primary-foreground">
               <SelectValue />
@@ -130,6 +178,16 @@ export function HomePage({ expenses, onDeleteExpense }: HomePageProps) {
               ))}
             </SelectContent>
           </Select>
+          <Button
+            onClick={exportToExcel}
+            variant="outline"
+            size="sm"
+            className="bg-white/20 border-white/30 text-primary-foreground hover:bg-white/30"
+          >
+            <Download size={16} className="mr-2" />
+            Export
+          </Button>
+        </div>
         </div>
 
         <div className="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-4">
